@@ -205,3 +205,20 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# Project-specific — data files (regenerate with src/run_etl.py)
+data/*.csv
+data/*.parquet
+data/*.nc
+data/*.zip
+
+# MLflow run artifacts (regenerate with src/train.py)
+mlruns/
+
+# Serialized model artifacts (regenerate with src/train.py)
+# Covers data/artifacts/*.pkl and any other pickle/torch checkpoints
+data/artifacts/
+*.pkl
+*.pt
+
+.DS_Store

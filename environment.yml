@@ -1,0 +1,27 @@
+name: richmond-current-ml
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.13
+  - pip
+  - numpy
+  - pandas
+  - scipy
+  - scikit-learn
+  - matplotlib
+  - xarray
+  - netcdf4
+  - h5py
+  - h5netcdf
+  - requests
+  - pyarrow          # parquet support
+  - pytest
+  - pip:
+    - noaa-coops
+    - dataretrieval
+    - utide
+    - xgboost
+    - torch
+    - shap
+    - mlflow
