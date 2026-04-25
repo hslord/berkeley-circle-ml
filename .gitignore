@@ -222,3 +222,4 @@ data/artifacts/
 *.pt
 
 .DS_Store
+notebooks/*.png
