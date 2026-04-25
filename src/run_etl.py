@@ -1,17 +1,17 @@
 """
-ETL script for richmond-current-ml.
+ETL script for berkeley-circle-ml.
 
 Fetches all data sources, builds the feature-engineered training dataset,
 and saves inference artifacts to data/artifacts/. Run this once before
 training; subsequent runs load from the parquet/CSV cache.
 
 Usage:
-    conda activate richmond-current-ml
-    cd ~/Documents/github_repos/richmond-current-ml
+    conda activate berkeley-circle-ml
+    cd ~/Documents/github_repos/berkeley-circle-ml
     python src/run_etl.py
 
 Outputs:
-    data/richmond_reach_train_<begin>_<end>.csv   — full feature dataset
+    data/berkeley_circle_train_<begin>_<end>.csv   — full feature dataset
     data/artifacts/utide_coef.pkl                 — tidal harmonic coefficients
     data/artifacts/pca_angle.pkl                  — along/cross rotation angle
 

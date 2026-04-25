@@ -1,8 +1,8 @@
-# Richmond Current ML
+# Berkeley Circle Current ML
 
-Tidal harmonic models do a reasonable job of predicting currents in San Francisco Bay — until early-season Sierra snowmelt hits the Delta. Elevated freshwater outflow suppresses and distorts tidal currents in ways that harmonic predictions miss entirely. This project started from that observation, made on the water, and asks: can I build a current forecast that meaningfully improves on harmonics using only open-source data?
+Tidal models capture the predictable, repeating component of currents well, but real conditions in SF Bay regularly deviate from the prediction. This project asks whether ML, using tidal harmonics as a foundation, can learn those deviations from open-source data and meaningfully improve forecast accuracy.
 
-The harder problem turned out to be data, not modeling. The locations that I care about for sailing — Cityfront, under the Golden Gate Bridge — have no usable long-term current record. NOAA's point current stations are sparse and recent; HF Radar provides continuous historical coverage but only at ~6km resolution, anchoring the model to wherever a clean HFR pixel exists. Richmond Reach (~37.856°N, 122.364°W) was chosen because it has the longest uninterrupted HFR record in the Bay (~88% valid since 2015) and sits at a dynamically interesting location where freshwater forcing is measurable.
+The harder problem turned out to be data, not modeling. Most locations have no usable long-term current record. NOAA's point current stations are sparse and recent; HF Radar provides continuous historical coverage but only at ~6km resolution, anchoring the model to wherever a clean HFR pixel exists. Berkeley Circle (~37.856°N, 122.364°W) was chosen because it has the longest uninterrupted HFR record in the Bay (~88% valid since 2015) and sits at a dynamically interesting location. 
 
 Given a viable observation record, the ML layer works well. An equal-weight ensemble of XGBoost and LSTM achieves a skill score of 0.762 on the 2025 test set — reducing prediction error by 76% relative to harmonics alone — with a direction MAE of 19.4°. The dominant drivers, confirmed by SHAP, are the autoregressive subtidal signal, future tidal rate of change, and Sacramento River discharge.
 
@@ -12,7 +12,7 @@ All experimentation is tracked in MLflow, with hyperparameters, metrics, model a
 
 ## Approach
 
-The model predicts the non-tidal residual rather than the full current. Tidal harmonics (via utide) explain the dominant variance; the ML layer focuses capacity on the wind, discharge, and pressure-driven signal that harmonics miss.
+The model predicts the non-tidal residual rather than the full current. Tidal harmonics (via utide) explain the dominant variance; the ML layer focuses capacity on the wind, discharge, and pressure-driven signal that harmonics miss. This uses tidal harmonics as a foundation rather than full hydrodynamic simulation — the approach is deliberately lightweight and data-driven.
 
 Predictions are made in along-channel / cross-channel coordinates derived from empirical PCA rotation of the observed u/v current components. The full current at T+24 is then reconstructed as:
 
@@ -47,7 +47,7 @@ Skill score = `1 − (MAE_model / MAE_tidal_only)`. All models substantially out
 ## Repo structure
 
 ```
-richmond-current-ml/
+berkeley-circle-ml/
 ├── src/
 │   ├── config.py              # stations, coordinates, date ranges, hyperparameters
 │   ├── run_etl.py             # fetch all data sources, build training dataset
@@ -63,6 +63,8 @@ richmond-current-ml/
 │   └── evaluation/
 │       ├── metrics.py         # MAE, skill score, direction MAE
 │       └── plots.py           # time series, scatter, SHAP, CV skill plots
+├── notebooks/
+│   └── map_predictions.ipynb  # load best model, generate predictions, overlay on SF Bay map
 ├── tests/                     # unit tests for ETL and feature engineering
 ├── data/                      # gitignored — regenerate with ETL (see below)
 └── mlruns/                    # gitignored — MLflow run artifacts
@@ -76,7 +78,7 @@ richmond-current-ml/
 
 ```bash
 conda env create -f environment.yml
-conda activate richmond-current-ml
+conda activate berkeley-circle-ml
 pip install -e .
 ```
 
@@ -104,7 +106,17 @@ python src/predict.py "2025-04-01 12:00"
 
 Outputs the 24h-ahead current forecast for a given issue time using the trained models. See note below on inference limitations.
 
-**5. Explore results in MLflow**
+**5. Explore predictions on a map**
+
+```bash
+jupyter notebook notebooks/map_predictions.ipynb
+```
+
+Loads the best XGBoost model from MLflow, generates predictions over the 2025 test set, and produces five figures overlaid on a Cartopy map of SF Bay: a context map showing the Berkeley Circle location and predictor stations, a quiver fan of hourly current vectors (observed vs predicted) for a two-week window, monthly panels showing mean predicted current and MAE, a directional current rose comparing observed and predicted distributions, and a speed scatter/bias plot.
+
+> **Note:** The notebook uses XGBoost-only predictions due to local jupyter kernel limitations for mlflow.pytorch. Scripts are unaffected and use the full ensemble.
+
+**6. Explore results in MLflow**
 
 ```bash
 mlflow ui --port 5001 --backend-store-uri mlruns
@@ -112,7 +124,7 @@ mlflow ui --port 5001 --backend-store-uri mlruns
 
 Open http://localhost:5001 to browse runs, compare metrics, and view logged plots (time series, scatter, SHAP beeswarm) directly in the MLflow UI.
 
-**6. Run tests**
+**7. Run tests**
 
 ```bash
 pytest tests/

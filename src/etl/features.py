@@ -233,7 +233,7 @@ def engineer_features(df: pd.DataFrame, utide_coef: dict,
     df["resid_along_fwd"] = df["resid_along"].shift(-fh)
     df["resid_cross_fwd"] = df["resid_cross"].shift(-fh)
 
-    # Discharge lags (Sacramento: 1–3 day transit to Richmond Reach)
+    # Discharge lags (Sacramento: 1–3 day transit to Berkeley Circle)
     df["discharge_lag1d"] = df["discharge_cms"].shift(24)
     df["discharge_lag2d"] = df["discharge_cms"].shift(48)
     df["discharge_lag3d"] = df["discharge_cms"].shift(72)

@@ -1,11 +1,11 @@
 """
-Training script for richmond-current-ml.
+Training script for berkeley-circle-ml.
 
 Runs CV + XGBoost + LSTM + MLflow logging.
 
 Usage:
-    conda activate richmond-current-ml
-    cd ~/Documents/github_repos/richmond-current-ml
+    conda activate berkeley-circle-ml
+    cd ~/Documents/github_repos/berkeley-circle-ml
     python src/train.py
 
 MLflow results appear in mlruns/ and are visible in the UI at http://localhost:5001

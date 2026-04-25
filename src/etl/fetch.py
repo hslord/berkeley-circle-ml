@@ -64,7 +64,7 @@ def _coops_chunk(begin: str, end: str, product: str, station: str,
         product=product, station=station,
         datum=datum, units=units,
         time_zone=time_zone, format="json",
-        application="richmond-current-ml",
+        application="berkeley-circle-ml",
     )
     if interval:
         params["interval"] = interval
@@ -164,7 +164,7 @@ def fetch_sst(station: str = COOPS_RICHMOND,
 
     Fort Point SST is intentionally excluded — Bay interior and ocean-entrance
     temperatures diverge significantly in summer, making Fort Point a poor proxy
-    for Richmond Reach stratification.
+    for Berkeley Circle stratification.
 
     Gaps > 48h are filled with monthly climatology computed from the same station.
     """
@@ -328,7 +328,7 @@ def _extract_uv(ds: xr.Dataset, target_lat: float, target_lon: float,
 
 
 def _fetch_single_hfr(dt: datetime) -> tuple[datetime, float, float]:
-    """Fetch one HFR netCDF file and extract the Richmond Reach pixel. Process-safe."""
+    """Fetch one HFR netCDF file and extract the Berkeley Circle pixel. Process-safe."""
     url = _ncei_url(dt)
     try:
         resp = requests.get(url, timeout=30)
@@ -351,7 +351,7 @@ def fetch_hfr(begin_iso: str = BEGIN_ISO,
               end_iso: str = END_ISO,
               cache_path: str = HFR_CACHE_PATH,
               workers: int = 4) -> pd.DataFrame:
-    """Fetch HFR USWC 6km surface currents for Richmond Reach.
+    """Fetch HFR USWC 6km surface currents for Berkeley Circle.
 
     Loads from parquet cache if available. Otherwise fetches from NCEI archive
     using a ProcessPoolExecutor (NOT threads — netcdf4 C library is not thread-safe).

@@ -1,5 +1,5 @@
 """
-Central configuration for richmond-current-ml.
+Central configuration for berkeley-circle-ml.
 All constants live here — stations, coordinates, date ranges, model parameters.
 """
 
@@ -12,7 +12,7 @@ TEST_START = "2025-01-01"
 # ── Forecast horizon ───────────────────────────────────────────────────────────
 FORECAST_HOURS = 24
 
-# ── HFR — Richmond Reach pixel ────────────────────────────────────────────────
+# ── HFR — Berkeley Circle pixel ────────────────────────────────────────────────
 HFR_LAT = 37.856
 HFR_LON = -122.364
 HFR_SEARCH_RADIUS_DEG = 0.1   # nearest-valid pixel search half-width
@@ -46,7 +46,7 @@ PFEL_URL = (
 
 # ── HFR cache ─────────────────────────────────────────────────────────────────
 HFR_CACHE_PATH = "data/hfr_cache_2015_2025.parquet"
-TRAIN_CSV_PATH = "data/richmond_reach_train_{begin}_{end}.csv"
+TRAIN_CSV_PATH = "data/berkeley_circle_train_{begin}_{end}.csv"
 
 # ── Tidal constituents (angular frequency, radians/hour) ──────────────────────
 TIDAL_CONSTITUENTS = {
@@ -124,11 +124,11 @@ CV_FOLDS = [
 
 # ── Evaluation ────────────────────────────────────────────────────────────────
 SLACK_SPEED_MS = 0.05   # NOAA definition; direction MAE filtered for speed > this
-SPEED_CLIP_MS  = 1.5    # physical maximum at Richmond Reach
+SPEED_CLIP_MS  = 1.5    # physical maximum at Location
 
 # ── MLflow ────────────────────────────────────────────────────────────────────
 MLFLOW_TRACKING_URI = "mlruns"
-MLFLOW_EXPERIMENT   = "richmond-current-24h"
+MLFLOW_EXPERIMENT   = "berkeley-circle-24h"
 MLFLOW_RUN_NAME     = "xgboost+lstm_168h_dropout01_noharmonics"
 
 # ── Paths ─────────────────────────────────────────────────────────────────────

@@ -1,5 +1,5 @@
 """
-Inference script for richmond-current-ml.
+Inference script for berkeley-circle-ml.
 
 Produces a 24-hour-ahead current forecast for a given issue time using the
 trained XGBoost models and pre-built feature dataset. Operates on historical
@@ -40,7 +40,7 @@ _repo_root = next(
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description='24h current forecast for Richmond Reach'
+        description='24h current forecast for Berkeley Circle'
     )
     parser.add_argument(
         'time',
@@ -117,7 +117,7 @@ def main() -> None:
 
     # ── Output ────────────────────────────────────────────────────────────────
     valid_time = t + pd.Timedelta(hours=fh)
-    print('\n24h Forecast — Richmond Reach')
+    print('\n24h Forecast — Berkeley Circle')
     print(f'  Issue time : {t}')
     print(f'  Valid time : {valid_time}')
     print(f'  Speed      : {speed:.2f} m/s')

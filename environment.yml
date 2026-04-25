@@ -1,4 +1,4 @@
-name: richmond-current-ml
+name: berkeley-circle-ml
 channels:
   - conda-forge
   - defaults
